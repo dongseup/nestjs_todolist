@@ -33,7 +33,7 @@ export class Todo {
   isDone: boolean;
 
   @CreateDateColumn()
-  cratedAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;

@@ -16,7 +16,9 @@ export class TodoService {
   }
 
   async getTodos() {
-    return await this.todoRepository.find();
+    return await this.todoRepository.find({
+      order: { createdAt: 'DESC' },
+    });
   }
 
   async updateTodo(param, updateTodoDto: UpdateTodoDto) {
