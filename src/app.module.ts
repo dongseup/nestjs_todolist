@@ -5,16 +5,22 @@ import { AppService } from './app.service';
 // import { PostsModule } from './posts/posts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TodoModule } from './todo/todo.module';
-import { join } from 'path';
 import configuration from './config/configuration';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthenticationModule } from './authentication/authentication.module';
+import * as Joi from 'joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       // configuration 설정을 coifg module 불러 올 때 로드한다
       isGlobal: true,
+      envFilePath: '.env.dev',
       load: [configuration],
+      validationSchema: Joi.object({
+        JWT_SECRET: Joi.string().required(),
+        JWT_EXPIRATION_TIME: Joi.string().required(),
+      }),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -38,6 +44,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         keepConnectionAlive: true,
       }),
     }),
+    AuthenticationModule,
     TodoModule,
   ],
   // imports: [UsersModule, PostsModule],

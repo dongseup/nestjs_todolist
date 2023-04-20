@@ -6,12 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { CreateTodoDto } from './dtos/createTodo.dto';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Todo } from './entities/todo.entity';
 import { UpdateTodoDto } from './dtos/updateTodo.dto';
+import { JwtAuthenticationGuard } from 'src/authentication/jwt-authentication.guard';
 
 @ApiTags('todo')
 @Controller('todo')
@@ -25,6 +27,7 @@ export class TodoController {
     type: Todo,
   })
   @Post()
+  @UseGuards(JwtAuthenticationGuard)
   async createTodo(@Body() createTodoDto: CreateTodoDto) {
     return await this.todoService.createTodo(createTodoDto);
   }
@@ -36,6 +39,7 @@ export class TodoController {
     type: [Todo],
   })
   @Get()
+  @UseGuards(JwtAuthenticationGuard)
   async getTodo() {
     return await this.todoService.getTodos();
   }
@@ -46,6 +50,7 @@ export class TodoController {
     description: 'todo id',
   })
   @Put('/:todoId')
+  @UseGuards(JwtAuthenticationGuard)
   async updateTodo(
     @Param() param: { todoId: string },
     @Body() updateTodoDto: UpdateTodoDto,
@@ -59,6 +64,7 @@ export class TodoController {
     description: 'todo id',
   })
   @Delete(':todoId')
+  @UseGuards(JwtAuthenticationGuard)
   async deleteTodo(@Param() param: { todoId: string }) {
     return await this.todoService.deleteTodo(param);
   }
@@ -74,6 +80,7 @@ export class TodoController {
     type: [Todo],
   })
   @Put('complete/:todoId')
+  @UseGuards(JwtAuthenticationGuard)
   async toggleComplete(@Param() param: { todoId: string }) {
     return await this.todoService.toggleComplete(param);
   }
